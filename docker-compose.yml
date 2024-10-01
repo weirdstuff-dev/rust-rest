@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  db:
+    hostname: "db"
+    restart: always
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "password"
+      POSTGRES_DB: "brands"
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+  backend:
+    restart: on-failure
+    depends_on:
+      - db
+    links:
+      - db
+    env_file: .env
+    build: .
+    ports:
+      - "8080:8080"
